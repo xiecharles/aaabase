@@ -1,6 +1,5 @@
 package org.tkzc.aaabase.util;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -26,30 +25,36 @@ public class StringUtil {
 	 * </pre>
 	 */
 	public static <T> String concatStringBySymbol(List<T> list, Class<T> clazz, String symbol, String getMethodName) {
+		// 声明组织连接的字符串(返回的字符串)
+		StringBuffer strbuf = new StringBuffer();
+		// 传入的列表为空则直接返回空字符串
+		if(list == null || list.isEmpty()) {
+			return strbuf.toString();
+		}
+		// 连接字符为空则默认为英文逗号
 		if(symbol == null) {
 			symbol = ",";
 		}
-		StringBuffer strbuf = new StringBuffer();
 		try {
+			// 声明get方法的对象
 			Method getMethod = null;
-			if(clazz != null && getMethodName != null && !getMethodName.isEmpty()) {
-				getMethod = clazz.getDeclaredMethod(getMethodName, new Class[] {});
+			// 传入的class类型不为空并且get方法的方法名称也不位空, 则尝试利用反射获取get方法的对象
+			if(clazz != null && getMethodName != null && !getMethodName.trim().isEmpty()) {
+				getMethod = clazz.getDeclaredMethod(getMethodName.trim(), new Class[] {});
 			}
+			// 遍历list, 拼接字符串
 			for (T t : list) {
+				// get方法对象不为空则反射获取指定get方法的返回值进行拼接, 否则直接拼接当前遍历的对象
 				strbuf.append(getMethod != null ? getMethod.invoke(t, new Object[] {}) : t);
+				// 拼接连接符
 				strbuf.append(symbol);
 			}
-		} catch (NoSuchMethodException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
+			// 任何异常返回空字符串(无非就是找不到方法的异常)
+			return strbuf.delete(0, strbuf.length()).toString();
 		}
+		// 删除最后一个多余的连接符
 		if(strbuf.length() > 0 && strbuf.toString().endsWith(symbol)) {
 			strbuf.delete(strbuf.lastIndexOf(symbol), strbuf.length());
 		}
