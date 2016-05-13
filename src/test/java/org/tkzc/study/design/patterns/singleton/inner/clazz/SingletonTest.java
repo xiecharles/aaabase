@@ -1,11 +1,11 @@
-package org.tkzc.study.design.patterns.singleton.general;
+package org.tkzc.study.design.patterns.singleton.inner.clazz;
 
 import org.junit.Test;
 
 public class SingletonTest {
 
 	@Test
-	public void testSingletonGeneral() {
+	public void testSingletonInnerClass() {
 		for(int i=0; i<5; i++) {
 			Singleton instance = Singleton.getInstance();
 			System.out.println(instance);
@@ -13,8 +13,7 @@ public class SingletonTest {
 	}
 	
 	@Test
-	public void testSingletonGeneralMultiThread() {
-		// 多执行几次单元测试就会发现有不同的实例出现
+	public void testSingletonInnerClassMultiThread() {
 		for(int i=0; i<5; i++) {
 			new Thread() {
 				@Override
