@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>~~~</title>
+<link href="jquery-ui.css" rel="stylesheet">
+<script type="text/javascript" src="jquery-3.0.0.js"></script>
+<script type="text/javascript" src="jquery-ui.js"></script>
+</head>
+
+<body>
+<form>
+	<input id="endTimeInput" type="text" placeholder="倒计时截止时间">
+	<input id="endTimeButton" type="button" value="确定">
+	<input id="stopButton" type="button" value="停止计时"><br>
+</form>
+<div id="msgbox">
+
+</div>
+</body>
+<script type="text/javascript">
+$(function() {
+	$.datepicker.regional["zh-CN"] = { closeText: "关闭", prevText: "&#x3c;上月", nextText: "下月&#x3e;", currentText: "今天", monthNames: ["一月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "十一月", "十二月"], monthNamesShort: ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"], dayNames: ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"], dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"], dayNamesMin: ["日", "一", "二", "三", "四", "五", "六"], weekHeader: "周", dateFormat: "yy-mm-dd", firstDay: 1, isRTL: !1, showMonthAfterYear: !0, yearSuffix: "年" }
+    $.datepicker.setDefaults($.datepicker.regional["zh-CN"]);
+	$('#endTimeInput').datepicker({
+		dateFormat : 'yy-mm-dd'
+	});
+	
+	var end = null;
+	var intervalRunHandle = null;
+	$('#endTimeButton').on('click', function() {
+		if(intervalRunHandle != null && intervalRunHandle != 'undefined') {
+			clearInterval(intervalRunHandle);
+		}
+		if($('#endTimeInput').val() == '') {
+			alert('请输入倒计时截止时间');
+			return;
+		}
+		end = $('#endTimeInput').datepicker( "getDate" );
+		// 定时执行
+		intervalRunHandle = setInterval(function() {
+			fun1();
+		}, 1000);
+	});
+	var fun1 = function() {
+		$('#msgbox').text('');
+		var now = new Date();
+		var nowSeconds = now.getTime()/1000;
+		var endSeconds = end.getTime()/1000;
+		var diffSeconds = Math.floor(endSeconds - nowSeconds);
+		var appendText = '';
+		appendText += '距今还有 ' + diffSeconds + ' 秒<br>';
+		var diffMinutes = Math.floor(diffSeconds / 60);
+		var diffMinutesModSeconds = diffSeconds % 60;
+		appendText += '距今还有 ' + diffMinutes + ' 分 ' + diffMinutesModSeconds + ' 秒<br>';
+		var diffHours = Math.floor(diffMinutes / 60);
+		var diffHoursModMinutes = diffMinutes % 60;
+		appendText += '距今还有 ' + diffHours + ' 时 ' + diffHoursModMinutes + ' 分 ' + diffMinutesModSeconds + ' 秒<br>';
+		var diffDays = Math.floor(diffHours / 24);
+		var diffDaysModHours = diffMinutes % 24;
+		appendText += '距今还有 ' + diffDays + ' 天 ' + diffDaysModHours + ' 时 ' + diffHoursModMinutes + ' 分 ' + diffMinutesModSeconds + ' 秒<br>';
+		$('#msgbox').append(appendText);
+	}
+	
+	$('#stopButton').on('click', function() {
+		if(intervalRunHandle != null && intervalRunHandle != 'undefined') {
+			clearInterval(intervalRunHandle);
+		}
+	});
+});
+</script>
+</html>
