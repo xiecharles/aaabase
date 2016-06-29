@@ -1,4 +1,4 @@
-package org.tkzc.aaabase.string;
+package org.tkzc.aaabase.test;
 
 import org.junit.Test;
 
