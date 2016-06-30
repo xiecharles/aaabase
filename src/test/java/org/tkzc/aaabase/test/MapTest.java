@@ -13,6 +13,8 @@ public class MapTest {
 		Map map = new HashMap();
 		Object obj0 = map.put("1", "111");
 		System.out.println(obj0);
+		obj0 = map.put("1", "1111");
+		System.out.println(obj0);
 		Object obj1 = map.remove("1");
 		System.out.println(obj1);
 		Object obj2 = map.remove("2");
