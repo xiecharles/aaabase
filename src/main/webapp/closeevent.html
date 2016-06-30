@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>close event test</title>
+<link href="jquery-ui.css" rel="stylesheet">
+<script type="text/javascript" src="jquery-3.0.0.js"></script>
+<script type="text/javascript" src="jquery-ui.js"></script>
+</head>
+
+<body>
+<div id="msgbox">
+
+</div>
+</body>
+<script type="text/javascript">
+$(function() {
+	'use strict';
+	
+	$(window).bind('beforeunload', function() {
+		return '';
+	});
+});
+</script>
+</html>
