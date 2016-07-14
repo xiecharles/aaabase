@@ -7,7 +7,8 @@ public enum EnumFileConvert {
 	XLS_TO_PDF("xls", "pdf"),
 	XLSX_TO_PDF("xlsx", "pdf"),
 	PPT_TO_PDF("ppt", "pdf"),
-	PPTX_TO_PDF("pptx", "pdf");
+	PPTX_TO_PDF("pptx", "pdf"),
+	PDF_TO_JPG("pdf", "jpg");
 	
 	private String srcExtName;
 	

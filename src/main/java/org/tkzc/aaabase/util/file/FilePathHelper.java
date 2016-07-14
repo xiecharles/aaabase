@@ -40,18 +40,52 @@ public final class FilePathHelper {
 	 */
 	private FilePathHelper() {}
 	
+	/**
+	 * 根据原文件及目标文件扩展名生成新的目标文件对象
+	 * @param srcFile
+	 * @param destExtName
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public static File generateFile(File srcFile, String destExtName) throws FileNotFoundException {
 		return new File(generatePath(srcFile, destExtName));
 	}
 	
+	/**
+	 * 根据原文件及目标文件扩展名生成新的目标文件路径
+	 * @param srcFile
+	 * @param destExtName
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public static String generatePath(File srcFile, String destExtName) throws FileNotFoundException {
 		return generatePath(srcFile, DESTFILE_SAMEPATH, null, null, destExtName);
 	}
 	
+	/**
+	 * 根据原文件、生成类型、目标文件扩展名及其他规则生成新的目标文件对象
+	 * @param srcFile 原文件
+	 * @param generateType 生成类型
+	 * @param destParentPath 目标文件存放路径
+	 * @param destName 目标文件名称
+	 * @param destExtName 目标文件扩展名
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public static File generateFile(File srcFile, int generateType, String destParentPath, String destName, String destExtName) throws FileNotFoundException {
 		return new File(generatePath(srcFile, generateType, destParentPath, destName, destExtName));
 	}
 	
+	/**
+	 * 根据原文件、生成类型、目标文件扩展名及其他规则生成新的目标文件路径
+	 * @param srcFile 原文件
+	 * @param generateType 生成类型
+	 * @param destParentPath 目标文件存放路径
+	 * @param destName 目标文件名称
+	 * @param destExtName 目标文件扩展名
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	public static String generatePath(File srcFile, int generateType, String destParentPath, String destName, String destExtName) throws FileNotFoundException {
 		// srcFile 判断
 		if(srcFile == null) {
@@ -69,7 +103,7 @@ public final class FilePathHelper {
 		}
 		destExtName = destExtName.toLowerCase();
 		// 截取原文件的扩展名
-		String srcExtName = srcFile.getName().substring(srcFile.getName().lastIndexOf(EXT_NAME_CONCAT_CHAR) + 1);
+		String srcExtName = getExtName(srcFile);
 		if(destExtName.equals(srcExtName.toLowerCase())) {
 			throw new IllegalArgumentException("destExtName equals with srcFile extension name");
 		}
@@ -122,5 +156,73 @@ public final class FilePathHelper {
 		default : 
 			throw new IllegalArgumentException("generateType is undefined : " + generateType);
 		}
+	}
+	
+	/**
+	 * 获得文件扩展名
+	 * <pre>
+	 * eg: file.doc             -> doc
+	 *     file.txt.bak         -> bak
+	 *     /data/user1/file.zip -> zip
+	 * </pre>
+	 * @param file
+	 * @return
+	 */
+	public static String getExtName(File file) {
+		if(file == null) {
+			return null;
+		}
+		return getExtName(file.getName());
+	}
+	
+	/**
+	 * 获得文件扩展名
+	 * <pre>
+	 * eg: file.doc             -> doc
+	 *     file.txt.bak         -> bak
+	 *     /data/user1/file.zip -> zip
+	 * </pre>
+	 * @param filename
+	 * @return
+	 */
+	public static String getExtName(String filename) {
+		if(filename == null || filename.isEmpty()) {
+			return filename;
+		}
+		return filename.substring(filename.lastIndexOf(EXT_NAME_CONCAT_CHAR) + 1);
+	}
+	
+	/**
+	 * 获得文件前缀名
+	 * <pre>
+	 * eg: file.doc             -> file
+	 *     file.txt.bak         -> file.txt
+	 *     /data/user1/file.zip -> /data/user1/file
+	 * </pre>
+	 * @param file
+	 * @return
+	 */
+	public static String getPrefixName(File file) {
+		if(file == null) {
+			return null;
+		}
+		return getPrefixName(file.getName());
+	}
+	
+	/**
+	 * 获得文件前缀名
+	 * <pre>
+	 * eg: file.doc             -> file
+	 *     file.txt.bak         -> file.txt
+	 *     /data/user1/file.zip -> /data/user1/file
+	 * </pre>
+	 * @param filename
+	 * @return
+	 */
+	public static String getPrefixName(String filename) {
+		if(filename == null || filename.isEmpty()) {
+			return filename;
+		}
+		return filename.substring(0, filename.lastIndexOf(EXT_NAME_CONCAT_CHAR));
 	}
 }

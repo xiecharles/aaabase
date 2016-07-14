@@ -6,7 +6,7 @@ public class FileConvertResult extends FileResult {
 	
 	protected String srcFilePath;
 	
-	protected String destFilePath;
+	protected String[] destFilePath;
 	
 	protected String convertType;
 
@@ -18,11 +18,11 @@ public class FileConvertResult extends FileResult {
 		this.srcFilePath = srcFilePath;
 	}
 
-	public String getDestFilePath() {
+	public String[] getDestFilePath() {
 		return destFilePath;
 	}
 
-	public void setDestFilePath(String destFilePath) {
+	public void setDestFilePath(String[] destFilePath) {
 		this.destFilePath = destFilePath;
 	}
 

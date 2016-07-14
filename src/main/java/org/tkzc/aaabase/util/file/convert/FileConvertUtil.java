@@ -61,4 +61,13 @@ public final class FileConvertUtil {
 	public static FileConvertResult xlsxConvertToPdf(File srcFile) {
 		return XlsxConvertToPdf.getInstance().convert(srcFile, EnumFileConvert.XLSX_TO_PDF);
 	}
+	
+	/**
+	 * pdf文档转jpg图片
+	 * @param srcFile
+	 * @return
+	 */
+	public static FileConvertResult pdfConvertToJpg(File srcFile) {
+		return PdfConvertToJpg.getInstance().convert(srcFile, EnumFileConvert.PDF_TO_JPG);
+	}
 }

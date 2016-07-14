@@ -69,6 +69,20 @@
       <artifactId>jodconverter-core</artifactId>
       <version>1.0.5</version>
     </dependency>
+    
+    <!-- https://mvnrepository.com/artifact/org.swinglabs/pdf-renderer -->
+    <dependency>
+      <groupId>org.swinglabs</groupId>
+      <artifactId>pdf-renderer</artifactId>
+      <version>1.0.5</version>
+    </dependency>
+    
+    <!-- https://mvnrepository.com/artifact/org.apache.pdfbox/pdfbox -->
+    <dependency>
+      <groupId>org.apache.pdfbox</groupId>
+      <artifactId>pdfbox</artifactId>
+      <version>1.8.12</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>org.tkzc.aaabase</finalName>
