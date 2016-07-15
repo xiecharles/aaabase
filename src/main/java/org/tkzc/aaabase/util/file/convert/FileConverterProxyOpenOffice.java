@@ -59,9 +59,6 @@ public class FileConverterProxyOpenOffice implements FileConverter {
 			result.setResultStatus(Boolean.FALSE);
 			result.setResultMessage("未找到原文件");
 			result.setSrcFilePath(srcFile.getAbsolutePath());
-		} catch (IllegalArgumentException e) {
-			result.setResultStatus(Boolean.FALSE);
-			result.setResultMessage("反射调用方法时参数错误");
 		}
 		return result;
 	}
