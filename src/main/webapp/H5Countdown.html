@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, height=device-height, user-scalable=no">
+<title>倒计时</title>
+<script type="text/javascript" src="jquery-3.0.0.js"></script>
+<style type="text/css">
+@font-face {font-family: UnidreamLED;src: url("font/UnidreamLED.ttf")}
+body {font-size: 17px;line-height: 21px;background-color: #33E1FF;}
+input {font-size: 17px;line-height: 21px;}
+#endTimeInput {width: 100px;height: 24px;position: absolute;}
+#endTimeCover,#showTitle {width: 200px;height: 50px;position: absolute;border: 1px solid #100;text-align: center;font-size: 20px;line-height: 50px;}
+#msgbox {width: 300px;height: 100px;position: absolute;border: 1px solid #100;text-align: center;font-size: 20px;line-height: 50px;}
+#msgbox>em {font-family: UnidreamLED;font-size: 40px;}
+#msgbox>em:first-of-type {font-family: UnidreamLED;font-size: 64px;}
+</style>
+</head>
+
+<body>
+<form>
+	<input id="endTimeInput" type="date" placeholder="倒计时截止时间">
+</form>
+<div id="endTimeCover"></div>
+<div id="showTitle"></div>
+<div id="msgbox"></div>
+</body>
+<script type="text/javascript">
+$(function() {
+	// 排列页面元素
+	// 获取窗口宽高
+	var winWidth = $(window).width();
+	var winHeight = $(window).height();
+	// 定位时间选择intput
+	var endTimeInputLeft = parseInt((winWidth - 100) / 2);
+	var endTimeInputTop = parseInt((winHeight / 3) - 50);
+	$('#endTimeInput').css({top: endTimeInputTop+'px',left: endTimeInputLeft+'px'});
+	// 定位覆盖层
+	var endTimeCoverLeft = parseInt((winWidth - 200) / 2);
+	var endTimeCoverTop = parseInt((winHeight / 3) - 50);
+	$('#endTimeCover').css({top: endTimeCoverTop+'px',left: endTimeCoverLeft+'px'});
+	// 定位title显示层
+	var showTitleLeft = parseInt((winWidth - 200) / 2);
+	var showTitleTop = parseInt(winHeight / 3);
+	$('#showTitle').css({top: showTitleTop+'px',left: showTitleLeft+'px'});
+	// 定位msgbox
+	var msgboxLeft = parseInt((winWidth - 300) / 2);
+	var msgboxTop = parseInt((winHeight / 3) * 2 - 50);
+	$('#msgbox').css({top: msgboxTop+'px',left: msgboxLeft+'px'});
+	
+	// 公共节日日期
+	var commonDateArray = [
+	        {date:'2016/08/01',title:'建军节'},
+	        {date:'2016/08/09',title:'七夕节'},
+	        {date:'2016/08/17',title:'中元节'},
+	        {date:'2016/09/10',title:'教师节'},
+	        {date:'2016/09/15',title:'中秋节'},
+	        {date:'2016/10/01',title:'国庆节'},
+	        {date:'2016/10/09',title:'重阳节'},
+	        {date:'2017/01/01',title:'元旦节'}
+	    ];
+	// 截止时间对象
+	var end = null;
+	// 定时运行句柄
+	var intervalRunHandle = null;
+	
+	// 初始化默认日期
+	var title = '';
+	var getNearCommonDate = function() {
+		var now = new Date();
+		for (var i=0; i<commonDateArray.length; i++) {
+			var commonDateTemp = new Date(commonDateArray[i].date);
+			if(now.getTime() < commonDateTemp.getTime()) {
+				title = commonDateArray[i].title;
+				return commonDateTemp;
+			}
+		}
+		return null;
+	}
+	// 默认取localStorage
+	if(window.localStorage) {
+		if(window.localStorage.getItem('lastDate')) {
+			// localStorage如果存在上次选择的日期，则使用该日期填充倒计时截止日期
+			end = new Date(window.localStorage.getItem('lastDate'));
+		} else {
+			end = getNearCommonDate();
+		}
+	} else {
+		end = getNearCommonDate();
+	}
+	// 填充默认日期
+	if(end) {
+		var endYaer = end.getFullYear();
+		var endMonth = end.getMonth() + 1;
+		var endDay = end.getDate();
+		$('#endTimeCover').text(endYaer+'年'+endMonth+'月'+endDay+'日');
+		$('#showTitle').text(title);
+		// 启动定时执行
+		intervalRunHandle = setInterval(function() {
+			fun1();
+		}, 1000);
+	} else {
+		$('#endTimeCover').text('点击选择倒计时日期');
+		$('#showTitle').text(title);
+	}
+	
+	// 处理点击事件
+	$('#endTimeCover').on('click', function() {
+		$('#endTimeInput').click();
+	});
+	// 处理时间选择器的输入变化事件
+	$('#endTimeInput').change(function() {
+		if(intervalRunHandle != null && intervalRunHandle != 'undefined') {
+			clearInterval(intervalRunHandle);
+		}
+		// 从选择控件获取日期
+		var endTimeInputValue = $('#endTimeInput').val();
+		if(window.localStorage) {
+			window.localStorage.setItem('lastDate', endTimeInputValue);
+		}
+		end = new Date(endTimeInputValue);
+		var endYaer = end.getFullYear();
+		var endMonth = end.getMonth() + 1;
+		var endDay = end.getDate();
+		$('#endTimeCover').text(endYaer+'年'+endMonth+'月'+endDay+'日');
+		$('#showTitle').text('');
+		// 定时执行
+		intervalRunHandle = setInterval(function() {
+			fun1();
+		}, 1000);
+	});
+	var fun1 = function() {
+		$('#msgbox').text('');
+		var now = new Date();
+		var nowSeconds = now.getTime()/1000;
+		var endSeconds = end.getTime()/1000;
+		var diffSeconds = Math.floor(endSeconds - nowSeconds);
+		var appendText = '';
+		var diffMinutes = Math.floor(diffSeconds / 60);
+		var diffMinutesModSeconds = diffSeconds % 60;
+		var diffHours = Math.floor(diffMinutes / 60);
+		var diffHoursModMinutes = diffMinutes % 60;
+		var diffDays = Math.floor(diffHours / 24);
+		var diffDaysModHours = diffMinutes % 24;
+		appendText += '距今还有<br><em>' + diffDays + '</em> 天&nbsp;&nbsp;&nbsp;&nbsp;<em>' + diffDaysModHours + ':' + diffHoursModMinutes + ':' + diffMinutesModSeconds + '</em>';
+		$('#msgbox').append(appendText);
+	}
+	
+	$('#stopButton').on('click', function() {
+		if(intervalRunHandle != null && intervalRunHandle != 'undefined') {
+			clearInterval(intervalRunHandle);
+		}
+	});
+});
+</script>
+</html>
