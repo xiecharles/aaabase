@@ -21,7 +21,7 @@ public class PdfConvertToJpgTest {
 	
 	@Test
 	public void testConvertProxyPdfbox() {
-		File srcFile = new File("E:\\Shell脚本学习指南 中文PDF版.pdf");
+		File srcFile = new File("E:\\1467106111007_1467106139468.pdf");
 		FileConverter instance = PdfConvertToJpg.getInstance(EnumFileConvertProxy.PDF_BOX);
 		FileConvertResult result = instance.convert(srcFile, EnumFileConvert.PDF_TO_JPG);
 		System.out.println(result.getResultMessage());
