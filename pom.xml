@@ -199,6 +199,13 @@
 			<artifactId>lucene-queryparser</artifactId>
 			<version>${lucene.version}</version>
 		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.apache.solr/solr-solrj -->
+		<dependency>
+		    <groupId>org.apache.solr</groupId>
+		    <artifactId>solr-solrj</artifactId>
+		    <version>5.2.1</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>org.tkzc.aaabase</finalName>
